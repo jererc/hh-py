@@ -5,6 +5,7 @@ import argparse
 import subprocess
 import shutil
 import re
+import gzip
 from urlparse import urljoin
 from urllib import urlretrieve
 
@@ -128,6 +129,13 @@ class AvroTools(object):
         return json_file
 
 
+def convert_gzip(gzip_file):
+    dst_file = os.path.splitext(gzip_file)[0]
+    with gzip.open(gzip_file, 'rb') as finput:
+        with open(dst_file, 'wb') as foutput:
+            foutput.write(finput.read())
+    return dst_file
+
 def popen(cmd, print_output=False):
     try:
         proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
@@ -147,6 +155,7 @@ def get(args):
     avro = AvroTools()
     converters = {
         '.avro': avro.convert_to_json,
+        '.gz': convert_gzip,
         }
     Hadoop().get(args.paths, converters=converters)
 
