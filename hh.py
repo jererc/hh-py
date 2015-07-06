@@ -16,6 +16,11 @@ AVRO_TOOLS_BASE_URL = 'http://www.us.apache.org/dist/avro/stable/java/'
 RE_AVRO_TOOLS = re.compile(r'\b(avro-tools-[\d\.]+\.jar)\b')
 BASE_PATH = os.path.expanduser('~')
 
+try:
+    from local_settings import *
+except ImportError:
+    pass
+
 
 class Hadoop(object):
 
